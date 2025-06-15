@@ -115,6 +115,9 @@ func setupTabBarAppearance() {
     UITabBar.appearance().standardAppearance = appearance
     UITabBar.appearance().scrollEdgeAppearance = appearance
 }
+
+
+
     
 #Preview {
         EntryView()

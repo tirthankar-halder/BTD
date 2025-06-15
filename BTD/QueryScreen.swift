@@ -105,8 +105,11 @@ struct QueryScreen: View {
             self.isLoading = true
         }
         print("Instructions submitted: \(instructions) Spinner value: \(isLoading)")
-        Task {
+        pingBackendIfNeeded {
+            Task {
             await callFlaskAPI(instructions: instructions)
+            }
+            
         }
     }
         
@@ -169,7 +172,21 @@ struct QueryScreen: View {
 
 } //query screen View
 
+func pingBackendIfNeeded(completion: @escaping () -> Void) {
+    guard let url = URL(string: "https://breakthemdown.onrender.com/ping") else {
+        completion()
+        return
+    }
 
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    request.timeoutInterval = 5 // Keep it short, it's just to wake up
+
+    URLSession.shared.dataTask(with: request) { _, _, _ in
+        // No matter what happens, continue with actual call
+        completion()
+    }.resume()
+}
 /*
 #Preview {
     QueryScreen(responseSteps: Tab.home, selectedTab: Tab.home)
