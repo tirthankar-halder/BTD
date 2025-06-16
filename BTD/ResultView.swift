@@ -73,14 +73,14 @@ struct ResultView: View {
                                     .padding()
                                     //      .background(Color(red: 30/255, green: 30/255, blue: 30/255))
                                     .background(Color(red: 60/255, green: 60/255, blue: 60/255))
-                                    .navigationBarBackButtonHidden()
+                                    .navigationBarHidden(true)
                                     .cornerRadius(12)
                                     .shadow(radius: 3)
                                 }
                                 
                             }
                             .padding()
-                            .navigationBarBackButtonHidden()
+                            .navigationBarHidden(true)
                         }
                         .background(Color.black.ignoresSafeArea())
                         .navigationBarBackButtonHidden()
@@ -103,7 +103,7 @@ struct ResultView: View {
                         }
                     }
         } //ZStack
-        .navigationBarBackButtonHidden()
+        .navigationBarHidden(true)
         
     } // Body
 

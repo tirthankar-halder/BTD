@@ -69,6 +69,7 @@ struct EntryView: View {
     @State private var MainScreen = false
 
     private let backgroundColor = Color(red: 12/255, green: 17/255, blue: 15/255)
+
     
     var body: some View {
            ZStack {
@@ -78,7 +79,7 @@ struct EntryView: View {
                     .scaledToFit()
                     .frame(width: 150, height: 150)
                 
-                Text("Version 1.0")
+                Text("Version \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
                     .foregroundColor(.white)
                     .font(.caption)
                     .padding(.top,130)

@@ -124,7 +124,7 @@ struct ContactUsView: View {
             .padding()
         }
         .background(Color.black.edgesIgnoringSafeArea(.all))
-        .navigationBarBackButtonHidden()
+        .navigationBarHidden(true)
     }
     func validateName() {
         if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
