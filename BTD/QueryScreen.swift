@@ -9,10 +9,30 @@ import SwiftUI
 import AVFoundation
 import Foundation
 
+struct PulsingDot: View {
+    @State private var scale: CGFloat = 1.0
+
+    var body: some View {
+        Circle()
+            .fill(Color.red)
+            .frame(width: 12, height: 12)
+            .scaleEffect(scale)
+            .animation(Animation.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: scale)
+            .onAppear {
+                scale = 1.5
+            }
+    }
+}
+
 
 struct QueryScreen: View {
     @State private var instructions: String = ""
     @State private var isLoading = false
+    
+    @State private var isRecording = false
+    @State private var recordingTime = 0
+    @State private var timer: Timer?
+    @State private var selectedLanguage = "en-US"
     
     @Binding var responseSteps: [StepItem]
     @Binding var selectedTab: Tab
@@ -21,6 +41,9 @@ struct QueryScreen: View {
     @State private var showAlert = false
     @State private var alertTitle = ""
     @State private var alertMessage = ""
+    
+    @StateObject private var recognizer = SpeechRecognizer(locale: Locale(identifier: "en-US"))
+
     
     var body: some View {
     ZStack {
@@ -38,6 +61,7 @@ struct QueryScreen: View {
                 .multilineTextAlignment(.leading)
                 .lineLimit(nil)
             
+           
             TextEditor(text: $instructions)
                 .frame(height: 150)
                 .padding(8)
@@ -49,6 +73,54 @@ struct QueryScreen: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color.yellow, lineWidth: 5)
                 )
+                .environment(\.colorScheme, .light) 
+            
+            if isRecording {
+                            Text("Recording: \(recordingTime)s")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .padding(.top, 4)
+                        }
+
+                        HStack {
+                            Button(action: {
+                                recognizer.requestPermission()
+
+                                if isRecording {
+                                    recognizer.stopTranscribing()
+                                    timer?.invalidate()
+                                    timer = nil
+                                } else {
+                                    let originalText = self.instructions
+                                    recognizer.onResult = { newText in
+                                        self.instructions = originalText + " " + newText
+                                    }
+                                    recognizer.startTranscribing()
+                                    recordingTime = 0
+                                    timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                                        recordingTime += 1
+                                    }
+                                }
+
+                                isRecording.toggle()
+                            }) {
+                                HStack {
+                                    Image(systemName: isRecording ? "mic.fill" : "mic")
+                                        .font(.title)
+                                        .foregroundColor(isRecording ? .red : .blue)
+
+                                    if isRecording {
+                                        PulsingDot()
+                                    }
+                                }
+                                .padding()
+                            }
+
+                           
+                        }
+
+                       
+                    
             
             
             Button(action: {

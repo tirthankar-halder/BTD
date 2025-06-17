@@ -18,6 +18,7 @@
 		BD860CE92DE11AFD0047E683 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD860CE82DE11AFD0047E683 /* ResultView.swift */; };
 		BD860CEB2DE11B600047E683 /* ContactUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD860CEA2DE11B600047E683 /* ContactUs.swift */; };
 		BD860CED2DE11D690047E683 /* AboutUs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD860CEC2DE11D690047E683 /* AboutUs.swift */; };
+		BDA07A032E0118A500B89CC1 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA07A022E01189900B89CC1 /* SpeechRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		BD860CE82DE11AFD0047E683 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		BD860CEA2DE11B600047E683 /* ContactUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUs.swift; sourceTree = "<group>"; };
 		BD860CEC2DE11D690047E683 /* AboutUs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUs.swift; sourceTree = "<group>"; };
+		BDA07A022E01189900B89CC1 /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		BDAA832B2DDC39F9003A47DF /* BTD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BTD.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				BDAA832B2DDC39F9003A47DF /* BTD.entitlements */,
+				BDA07A022E01189900B89CC1 /* SpeechRecognizer.swift */,
 				BD511A0E2DD775AC005E1ED8 /* BTDApp.swift */,
 				BD511A102DD775AC005E1ED8 /* EntryView.swift */,
 				BD860CE62DE11A970047E683 /* QueryScreen.swift */,
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BDA07A032E0118A500B89CC1 /* SpeechRecognizer.swift in Sources */,
 				BD860CEB2DE11B600047E683 /* ContactUs.swift in Sources */,
 				BD511A112DD775AC005E1ED8 /* EntryView.swift in Sources */,
 				BD860CE92DE11AFD0047E683 /* ResultView.swift in Sources */,
@@ -365,6 +369,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone for voice input.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "This app needs access to transcribe your speech.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -422,6 +429,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone for voice input.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "This app needs access to transcribe your speech.";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
