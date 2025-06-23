@@ -43,10 +43,20 @@ struct QueryScreen: View {
     @State private var alertMessage = ""
     
     @StateObject private var recognizer = SpeechRecognizer(locale: Locale(identifier: "en-US"))
+    @FocusState private var isTextFieldFocused: Bool
+    
+    var isSubmitEnabled: Bool {
+        !instructions.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isLoading
+    }
+
 
     
     var body: some View {
     ZStack {
+        // Tapping anywhere in the ZStack dismisses keyboard
+        Color.black
+            .ignoresSafeArea()
+        
         VStack(alignment: .leading, spacing: 20) {
             
             Text("BreakThemDown")
@@ -61,66 +71,74 @@ struct QueryScreen: View {
                 .multilineTextAlignment(.leading)
                 .lineLimit(nil)
             
-           
-            TextEditor(text: $instructions)
-                .frame(height: 150)
-                .padding(8)
-  //              .background(Color(red: 12/255, green: 17/255, blue: 15/255))
-                .background(Color.white)          // Force white background
-                .foregroundColor(.black)
-                .cornerRadius(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.yellow, lineWidth: 5)
-                )
-                .environment(\.colorScheme, .light) 
-            
-            if isRecording {
-                            Text("Recording: \(recordingTime)s")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                                .padding(.top, 4)
-                        }
-
-                        HStack {
-                            Button(action: {
-                                recognizer.requestPermission()
-
-                                if isRecording {
-                                    recognizer.stopTranscribing()
-                                    timer?.invalidate()
-                                    timer = nil
-                                } else {
-                                    let originalText = self.instructions
-                                    recognizer.onResult = { newText in
-                                        self.instructions = originalText + " " + newText
-                                    }
-                                    recognizer.startTranscribing()
-                                    recordingTime = 0
-                                    timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                                        recordingTime += 1
-                                    }
-                                }
-
-                                isRecording.toggle()
-                            }) {
-                                HStack {
-                                    Image(systemName: isRecording ? "mic.fill" : "mic")
-                                        .font(.title)
-                                        .foregroundColor(isRecording ? .red : .blue)
-
-                                    if isRecording {
-                                        PulsingDot()
-                                    }
-                                }
-                                .padding()
-                            }
-
-                           
-                        }
-
-                       
+            ZStack(alignment: .topLeading) {
+                
+               
+                ZStack(alignment: .bottomTrailing) {
+                    TextEditor(text: $instructions)
+                        .focused($isTextFieldFocused)
+                        .frame(height: 150)
+                        .padding(8)
+                        .background(Color.white)          // Force white background
+                        .foregroundColor(.black)
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.yellow, lineWidth: 5)
+                        )
+                        .environment(\.colorScheme, .light)
+                        .tint(.black)
                     
+                    Button(action: {
+                        recognizer.requestPermission()
+                        if isRecording {
+                            recognizer.stopTranscribing()
+                            timer?.invalidate()
+                            timer = nil
+                        } else {
+                            let originalText = self.instructions
+                            recognizer.onResult = { newText in
+                                self.instructions = originalText + " " + newText
+                            }
+                            recognizer.startTranscribing()
+                            recordingTime = 0
+                            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                                recordingTime += 1
+                            }
+                        }
+                        
+                        isRecording.toggle()
+                    }) {
+                        
+                            Image(systemName: isRecording ? "mic.fill" : "mic")
+                                .font(.title2)
+                                .foregroundColor(isRecording ? .red : .blue)
+                                .padding(8)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                            
+                        
+                        
+                    }
+                    .padding(12)
+                    
+                }
+                if instructions.isEmpty {
+                    Text("Enter your instructions here...")
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                }
+                
+                if isRecording {
+                    Text("Recording: \(recordingTime)s")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .padding(.top, 4)
+                    PulsingDot()
+                }
+            }
+                              
             
             
             Button(action: {
@@ -135,7 +153,7 @@ struct QueryScreen: View {
                     .foregroundColor(.black)
                     .cornerRadius(8)
             }
-            .disabled(isLoading)
+            .disabled(!isSubmitEnabled)
             Spacer()
             
             
@@ -173,6 +191,10 @@ struct QueryScreen: View {
             .animation(.easeInOut, value: isLoading)
         }
     }
+
+        .onTapGesture {
+            isTextFieldFocused = false
+        }
         }
         
         // Method to trigger the API call
@@ -183,6 +205,7 @@ struct QueryScreen: View {
                 self.navigateToSteps = false
                 self.navigateToSteps = true
             }
+            isTextFieldFocused = false
             self.isLoading = true
         }
         print("Instructions submitted: \(instructions) Spinner value: \(isLoading)")
