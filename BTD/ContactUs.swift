@@ -158,11 +158,12 @@ struct ContactUsView: View {
         guard let url = URL(string: "https://breakthemdown.onrender.com/contact") else { return }
         print("In Send Contact")
         isSending = true
-
+        let fullMessage = "\(message)\n<This message is from iOS App>"
+        
         let body: [String: Any] = [
             "name": name,
             "email": email,
-            "message": message
+            "message": fullMessage
         ]
 
         var request = URLRequest(url: url)

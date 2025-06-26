@@ -64,6 +64,9 @@ struct QueryScreen: View {
                 .foregroundColor(.yellow)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .layoutPriority(1)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            
             
             Text("Turn complex Ideas, instructions, habits into clear, doable, steps so that they are easy to understand and act on #BreakThemDown")
                 .font(.headline)
@@ -234,7 +237,10 @@ struct QueryScreen: View {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let json: [String: Any] = ["instruction": instructions]
+        let json: [String: Any] = [
+            "instruction": instructions,
+            "source": "ios",
+            "region": Locale.current.region?.identifier ?? "None"]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
         request.httpBody = jsonData
 
